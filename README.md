@@ -52,7 +52,7 @@ flowchart TD
     chat -->|response| client
 
     chat -.->|should_mirror?| rc["RuntimeConfig<br/>shadow_percentage"]
-    chat -.->|submit job O(1),<br/>never awaited| exec["ShadowExecutor<br/>bounded queue + worker pool"]
+    chat -.->|submit job O&lpar;1&rpar;, never awaited| exec["ShadowExecutor<br/>bounded queue + worker pool"]
 
     exec --> pipeline["ShadowPipeline<br/>(detached)"]
     pipeline -->|invoke| candidate["CandidateLLMService"]
