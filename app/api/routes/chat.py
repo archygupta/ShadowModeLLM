@@ -46,7 +46,29 @@ async def chat(
     shadow_executor: ShadowExecutorDep,
     runtime_config: RuntimeConfigDep,
     metrics: MetricsServiceDep,
-    payload: Any = Body(..., description="Arbitrary JSON forwarded to the primary LLM."),
+    payload: Any = Body(
+        ...,
+        description="Arbitrary JSON forwarded to the primary LLM.",
+        openapi_examples={
+            "chat_completion": {
+                "summary": "Chat completion request",
+                "description": (
+                    "A typical chat request. 'model' is optional — it defaults "
+                    "to PRIMARY_LLM_MODEL when omitted."
+                ),
+                "value": {
+                    "messages": [
+                        {
+                            "role": "user",
+                            "content": 'Reply with only this JSON: {"action": "buy"}',
+                        }
+                    ],
+                    "temperature": 0,
+                    "max_completion_tokens": 64,
+                },
+            }
+        },
+    ),
 ) -> JSONResponse:
     """Proxy the request body to the primary LLM and return its response.
 

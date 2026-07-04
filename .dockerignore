@@ -1,0 +1,26 @@
+# Keep the build context small and never ship secrets or local state.
+.git/
+.gitignore
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+htmlcov/
+.coverage
+tests/
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+.env
+.env.*
+!.env.example
+README.md
+.do/
+Dockerfile
+.dockerignore

@@ -1,0 +1,51 @@
+# DigitalOcean App Platform spec for the Shadow Mode LLM Evaluator.
+#
+# Deploy with:
+#   doctl apps create --spec .do/app.yaml
+# Update an existing app with:
+#   doctl apps update <APP_ID> --spec .do/app.yaml
+#
+# NOTE: Secret values (API keys) are intentionally left blank here so they are
+# never committed to git. Set them in the DigitalOcean dashboard
+# (App -> Settings -> Environment Variables) or via `doctl` after creation.
+name: shadow-mode-llm-evaluator
+region: nyc
+services:
+  - name: api
+    dockerfile_path: Dockerfile
+    github:
+      repo: archygupta/ShadowModeLLM
+      branch: main
+      deploy_on_push: true
+    http_port: 8080
+    # Cheapest always-on instance (~$5/mo). Adjust in the dashboard if needed.
+    instance_size_slug: apps-s-1vcpu-0.5gb
+    instance_count: 1
+    health_check:
+      http_path: /health
+      initial_delay_seconds: 10
+      period_seconds: 10
+    envs:
+      # ---- Secrets: leave blank, set real values in the dashboard ----
+      - key: PRIMARY_LLM_API_KEY
+        scope: RUN_TIME
+        type: SECRET
+      - key: CANDIDATE_LLM_API_KEY
+        scope: RUN_TIME
+        type: SECRET
+      # ---- Non-secret runtime config ----
+      - key: PRIMARY_LLM_MODEL
+        scope: RUN_TIME
+        value: mistral-3-14B
+      - key: CANDIDATE_LLM_MODEL
+        scope: RUN_TIME
+        value: deepseek-4-flash
+      - key: LOG_JSON
+        scope: RUN_TIME
+        value: "true"
+      - key: SHADOW_PERCENTAGE
+        scope: RUN_TIME
+        value: "100"
+      - key: SQLITE_DB_PATH
+        scope: RUN_TIME
+        value: /tmp/shadow_traces.db

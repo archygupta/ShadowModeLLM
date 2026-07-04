@@ -139,7 +139,7 @@ class Settings(BaseSettings):
         description="Full URL of the candidate LLM chat completions endpoint.",
     )
     candidate_llm_model: str = Field(
-        default="llama3.3-70b-instruct",
+        default="deepseek-4-flash",
         validation_alias="CANDIDATE_LLM_MODEL",
         description="Default model applied to the shadow payload when it omits 'model'.",
     )
